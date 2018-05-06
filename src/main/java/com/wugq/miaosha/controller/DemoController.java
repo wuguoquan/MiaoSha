@@ -1,6 +1,7 @@
 package com.wugq.miaosha.controller;
 
 import com.wugq.miaosha.domain.User;
+import com.wugq.miaosha.rabbitmq.MQSender;
 import com.wugq.miaosha.redis.RedisService;
 import com.wugq.miaosha.redis.UserKey;
 import com.wugq.miaosha.result.CodeMsg;
@@ -24,6 +25,9 @@ public class DemoController {
 
     @Autowired
     RedisService redisService;
+
+    @Autowired
+    MQSender sender;
 
     //1.rest api json输出 2.页面
     @RequestMapping("/hello")
@@ -75,4 +79,10 @@ public class DemoController {
         return Result.success(true);
     }
 
+    @RequestMapping("/mq")
+    @ResponseBody
+    public Result<String> mq() {
+		sender.send("hello,wugq");
+        return Result.success("Hello，wugq");
+    }
 }
